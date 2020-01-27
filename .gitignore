@@ -15,7 +15,6 @@ pack/
 .local-npm/
 .tools/
 coverage/
-.nyc_output
 .LAST_BUILD
 *.sw[a-z]
 *~
@@ -31,3 +30,8 @@ cdk.out/
 
 # Yarn error log
 yarn-error.log
+
+*.js
+!jest.config.js
+*.d.ts
+
