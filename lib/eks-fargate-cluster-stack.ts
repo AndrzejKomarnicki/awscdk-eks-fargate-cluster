@@ -2,7 +2,6 @@ import * as cdk from "@aws-cdk/core";
 import ec2 = require("@aws-cdk/aws-ec2");
 import eks = require("@aws-cdk/aws-eks");
 import iam = require("@aws-cdk/aws-iam");
-import { Vpc, PublicSubnet } from "@aws-cdk/aws-ec2";
 
 export class EksFargateClusterStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -37,8 +36,9 @@ export class EksFargateClusterStack extends cdk.Stack {
       ]
     });
 
-    // VPC Endpoints
+    // VPC Endpoints - Optional
 
+    /*
     const DynamoDBEndpoint = vpc.addGatewayEndpoint("DynamoDBEndpoint", {
       service: ec2.GatewayVpcEndpointAwsService.DYNAMODB
     });
@@ -46,6 +46,7 @@ export class EksFargateClusterStack extends cdk.Stack {
     const S3Endpoint = vpc.addGatewayEndpoint("S3Endpoint", {
       service: ec2.GatewayVpcEndpointAwsService.S3
     });
+*/
 
     // allow all account users to assume this role in order to admin the cluster
     const clusterAdmin = new iam.Role(this, "AdminRole", {
