@@ -46,7 +46,7 @@ export class EksFargateClusterStack extends cdk.Stack {
     const S3Endpoint = vpc.addGatewayEndpoint("S3Endpoint", {
       service: ec2.GatewayVpcEndpointAwsService.S3
     });
-*/
+    */
 
     // allow all account users to assume this role in order to admin the cluster
     const clusterAdmin = new iam.Role(this, "AdminRole", {
