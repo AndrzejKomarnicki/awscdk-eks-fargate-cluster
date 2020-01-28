@@ -19,11 +19,13 @@ When you `cdk deploy` this app you will notice that an output will be printed wi
 
 If you have issues with the CoreDNS deployment, validate that the pod template has the following Annotations:
 eks.amazonaws.com/compute-type: fargate
-$ kubectl describe deployment coredns --namespace kube-system
+
+    $ kubectl describe deployment coredns --namespace kube-system
 
 Try scaling down then back up:
-$ kubectl scale -n kube-system deployment/coredns --replicas=0
-$ kubectl scale -n kube-system deployment/coredns --replicas=3
+
+    $ kubectl scale -n kube-system deployment/coredns --replicas=0
+    $ kubectl scale -n kube-system deployment/coredns --replicas=3
 
 ## Useful CDK commands
 
