@@ -32,4 +32,5 @@ Try scaling down then back up:
 
 - `cdk diff` compare deployed stack with current state
 - `cdk synth` emits the synthesized CloudFormation template
+- `cdk bootstrap` bootstraps the s3 bucket for the deployment
 - `cdk deploy` deploy this stack to your default AWS account/region
