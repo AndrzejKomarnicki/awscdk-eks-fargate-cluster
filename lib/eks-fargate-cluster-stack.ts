@@ -2,6 +2,7 @@ import * as cdk from "@aws-cdk/core";
 import ec2 = require("@aws-cdk/aws-ec2");
 import eks = require("@aws-cdk/aws-eks");
 import iam = require("@aws-cdk/aws-iam");
+import * as hello from "../expressjs-api/hello-expressjs";
 
 export class EksFargateClusterStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -39,6 +40,7 @@ export class EksFargateClusterStack extends cdk.Stack {
     // VPC Endpoints - Optional
 
     /*
+
     const DynamoDBEndpoint = vpc.addGatewayEndpoint("DynamoDBEndpoint", {
       service: ec2.GatewayVpcEndpointAwsService.DYNAMODB
     });
@@ -46,6 +48,7 @@ export class EksFargateClusterStack extends cdk.Stack {
     const S3Endpoint = vpc.addGatewayEndpoint("S3Endpoint", {
       service: ec2.GatewayVpcEndpointAwsService.S3
     });
+
     */
 
     // allow all account users to assume this role in order to admin the cluster
@@ -61,6 +64,6 @@ export class EksFargateClusterStack extends cdk.Stack {
       vpc
     });
 
-    // cluster.addResource("HelloApp", ...hello.resources); ?
+    cluster.addResource("Express Hello App", ...hello.resources);
   }
 }
