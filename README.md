@@ -33,7 +33,6 @@ eks.amazonaws.com/compute-type: fargate
 
     $ kubectl describe deployment coredns --namespace kube-system
 
-Try scaling down then back up:
+Trigger a rollout of the coredns Deployment:
 
-    $ kubectl scale -n kube-system deployment/coredns --replicas=0
-    $ kubectl scale -n kube-system deployment/coredns --replicas=3
+    $ kubectl rollout restart -n kube-system deployment coredns
