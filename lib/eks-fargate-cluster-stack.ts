@@ -1,5 +1,4 @@
 import * as cdk from "aws-cdk-lib";
-import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
 import { Construct } from "constructs";
 import * as eks from "aws-cdk-lib/aws-eks";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
