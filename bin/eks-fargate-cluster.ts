@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 import "source-map-support/register";
-import * as cdk from "@aws-cdk/core";
+import { App } from 'aws-cdk-lib'
 import { EksFargateClusterStack } from "../lib/eks-fargate-cluster-stack";
 
-const app = new cdk.App();
+const app = new App();
 
-const envUSA = { account: "11111111111", region: "us-east-1" };
+// const envUSA = { account: "11111111111", region: "us-east-1" };
 
 new EksFargateClusterStack(app, "EksFargateClusterStack", {
-  env: envUSA
+  //  env: envUSA
 });
 
-app.synth();
+app.synth(); 

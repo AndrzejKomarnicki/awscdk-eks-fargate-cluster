@@ -1,11 +1,13 @@
-import * as cdk from "@aws-cdk/core";
-import ec2 = require("@aws-cdk/aws-ec2");
-import eks = require("@aws-cdk/aws-eks");
-import iam = require("@aws-cdk/aws-iam");
-import { KubernetesVersion } from "@aws-cdk/aws-eks";
+import * as cdk from "aws-cdk-lib";
+import { KubernetesVersion } from "aws-cdk-lib/aws-eks";
+import { Construct } from "constructs";
+import * as eks from "aws-cdk-lib/aws-eks";
+import * as ec2 from "aws-cdk-lib/aws-ec2";
+import * as iam from "aws-cdk-lib/aws-iam";
+import { KubectlV25Layer } from '@aws-cdk/lambda-layer-kubectl-v25';
 
 export class EksFargateClusterStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // Custom VPC Build (Min 2 AZs)
@@ -27,12 +29,12 @@ export class EksFargateClusterStack extends cdk.Stack {
         {
           cidrMask: 24,
           name: "Private1",
-          subnetType: ec2.SubnetType.PRIVATE
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
         },
         {
           cidrMask: 24,
           name: "Private2",
-          subnetType: ec2.SubnetType.PRIVATE
+          subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
         }
       ]
     });
@@ -58,7 +60,8 @@ export class EksFargateClusterStack extends cdk.Stack {
 
     // Initialize cluster
     const cluster = new eks.FargateCluster(this, 'MyCluster', {
-      version: eks.KubernetesVersion.V1_19,
+      version: eks.KubernetesVersion.V1_25,
+      kubectlLayer: new KubectlV25Layer(this, 'kubectl'),
       mastersRole: clusterAdmin,
       outputClusterName: true,
       outputMastersRoleArn: true,
@@ -99,6 +102,6 @@ export class EksFargateClusterStack extends cdk.Stack {
           }
         }
       });
-    
+
   }
 }
