@@ -3,7 +3,9 @@ import { Construct } from "constructs";
 import * as eks from "aws-cdk-lib/aws-eks";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as iam from "aws-cdk-lib/aws-iam";
+import * as kms from "aws-cdk-lib/aws-kms";
 import { KubectlV25Layer } from '@aws-cdk/lambda-layer-kubectl-v25';
+
 
 export class EksFargateClusterStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -52,10 +54,21 @@ export class EksFargateClusterStack extends cdk.Stack {
 
     */
 
-    // allow all account users to assume this role in order to admin the cluster
+    // allow all account users to assume this role in order to view the eks cluster console resources
     const clusterAdmin = new iam.Role(this, 'AdminRole', {
-      assumedBy: new iam.AccountRootPrincipal()
-    });
+      assumedBy: new iam.AccountRootPrincipal(),
+      // add new inline iam policy with eks console access  
+      inlinePolicies: {
+        'eks-console-access': new iam.PolicyDocument({
+          statements: [
+            new iam.PolicyStatement({
+              actions: ['eks:List*', 'eks:Describe*', 'eks:AccessKubernetesApi'],
+              resources: ['*'],
+            }),
+          ],
+        }),
+      }
+    })
 
     // Initialize cluster
     const cluster = new eks.FargateCluster(this, 'MyCluster', {
@@ -64,6 +77,9 @@ export class EksFargateClusterStack extends cdk.Stack {
       mastersRole: clusterAdmin,
       outputClusterName: true,
       outputMastersRoleArn: true,
+      outputConfigCommand: true,
+      endpointAccess: eks.EndpointAccess.PUBLIC_AND_PRIVATE,
+      secretsEncryptionKey: new kms.Key(this, 'EKS_KMS_Key'),
       vpc
     });
 

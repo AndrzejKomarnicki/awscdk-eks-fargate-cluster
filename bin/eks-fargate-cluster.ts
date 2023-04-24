@@ -5,10 +5,10 @@ import { EksFargateClusterStack } from "../lib/eks-fargate-cluster-stack";
 
 const app = new App();
 
-// const envUSA = { account: "11111111111", region: "us-east-1" };
+const defaultenv = { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION };
 
 new EksFargateClusterStack(app, "EksFargateClusterStack", {
-  //  env: envUSA
+  env: defaultenv
 });
 
 app.synth(); 
