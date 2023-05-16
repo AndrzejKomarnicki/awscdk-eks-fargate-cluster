@@ -83,6 +83,9 @@ export class EksFargateClusterStack extends cdk.Stack {
       vpc
     });
 
+    // add tags to cluster  
+    cdk.Tags.of(cluster).add('Project', 'EKS-Fargate-Cluster');
+
 
     cluster.addManifest('Express Hello App', {
       apiVersion: "v1",
