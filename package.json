@@ -13,7 +13,7 @@
     "@aws-cdk/lambda-layer-kubectl-v25": "^2.0.3",
     "@types/node": "18.15.11",
     "aws-cdk": "^2.76.0",
-    "aws-cdk-lib": "^2.76.0",
+    "aws-cdk-lib": "^2.80.0",
     "constructs": "^10.2.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
