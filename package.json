@@ -1,6 +1,6 @@
 {
   "name": "eks-fargate-cluster",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "bin": {
     "eks-fargate-cluster": "bin/eks-fargate-cluster.js"
   },
