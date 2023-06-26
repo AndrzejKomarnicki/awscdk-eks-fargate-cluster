@@ -79,6 +79,10 @@ export class EksFargateClusterStack extends cdk.Stack {
       outputMastersRoleArn: true,
       outputConfigCommand: true,
       endpointAccess: eks.EndpointAccess.PUBLIC_AND_PRIVATE,
+      albController: {
+        version: eks.AlbControllerVersion.V2_5_1
+      },
+
       secretsEncryptionKey: new kms.Key(this, 'EKS_KMS_Key'),
       vpc
     });
@@ -87,16 +91,38 @@ export class EksFargateClusterStack extends cdk.Stack {
     cdk.Tags.of(cluster).add('Project', 'EKS-Fargate-Cluster');
 
 
-    cluster.addManifest('Express Hello App', {
-      apiVersion: "v1",
-      kind: "Service",
-      metadata: { name: "hello-expressjs" },
+    // deploy k8s manifest with ingress
+    const manifest = cluster.addManifest('Express Hello App', {
+      apiVersion: "networking.k8s.io/v1",
+      kind: "Ingress",
+      metadata: {
+        "name": "ingress-hello-expressjs",
+        annotations: {
+          'kubernetes.io/ingress.class': 'alb',
+          'alb.ingress.kubernetes.io/scheme': 'internet-facing'
+        }
+      },
       spec: {
-        type: "NodePort",
-        ports: [{ port: 8080, nodePort: 30036 }],
-        selector: { app: "hello-expressjs" }
+        defaultBackend: {
+          service: {
+            name: "hello-expressjs",
+            port: {
+              number: 8080
+            }
+          }
+        }
       }
     },
+      {
+        apiVersion: "v1",
+        kind: "Service",
+        metadata: { name: "hello-expressjs" },
+        spec: {
+          type: "NodePort",
+          ports: [{ port: 80, targetPort: 8080, protocol: "TCP" }],
+          selector: { app: "hello-expressjs" }
+        }
+      },
       {
         apiVersion: "apps/v1",
         kind: "Deployment",
@@ -120,6 +146,12 @@ export class EksFargateClusterStack extends cdk.Stack {
           }
         }
       });
+
+
+
+    if (cluster.albController) {
+      manifest.node.addDependency(cluster.albController);
+    }
 
   }
 }
