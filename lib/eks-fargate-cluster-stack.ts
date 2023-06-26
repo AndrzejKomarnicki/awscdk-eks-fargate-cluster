@@ -107,7 +107,7 @@ export class EksFargateClusterStack extends cdk.Stack {
           service: {
             name: "hello-expressjs",
             port: {
-              number: 8080
+              number: 80
             }
           }
         }
@@ -116,7 +116,12 @@ export class EksFargateClusterStack extends cdk.Stack {
       {
         apiVersion: "v1",
         kind: "Service",
-        metadata: { name: "hello-expressjs" },
+        metadata: {
+          name: "hello-expressjs",
+          annotations: {
+            'alb.ingress.kubernetes.io/target-type': 'ip'
+          }
+        },
         spec: {
           type: "NodePort",
           ports: [{ port: 80, targetPort: 8080, protocol: "TCP" }],
